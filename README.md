@@ -2,25 +2,29 @@
 
 This repository created to update weekly course progress of Linux Management in ICT Robotics (BEIRP24A6)
 
-## Assingment 1 - Azure Virtual Machine Setup
+## Assingment 1
 
-### Initial Setup
+### Azure Virtual Machine Setup
+
+#### Initial Setup
 1. Used existing personal GitHub account
 2. Linked HAMK student email to personal GitHub account through Settings > Emails
 
-### Azure Account Setup
+#### Azure Account Setup
 1. Created Azure account using HAMK student email at portal.azure.com
 2. Activated Azure for Students subscription for additional credits
 
-### Virtual Machine Creation
+#### Virtual Machine Creation
 
-#### Machine Specifications:
+##### Machine Specifications:
 - **Image**: Ubuntu Server 24.04 LTS gen 2 (Canonical)
 - **Name**: Ubuntu1-tja-NEur-B1s
 - **Size**: Standard_B2ls_v2
 - **Authentication**: SSH key
 - **Network**: New resource group and subnet created
 - **Security**: Configured to allow SSH traffic from specified IP
+
+![VM Overview](images/w1-azure-vm-overview.png)
 
 ### SSH Connection Setup with PuTTY
 
