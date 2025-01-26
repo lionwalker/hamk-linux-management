@@ -69,5 +69,7 @@ For each of the five selected level 2 directories, the contents should be listed
 sudo ls /etc/{security,selinux,systemd,sos,ssh} > listing.md
 ```
 
+![Linux Command](images/w2-linux-command-assignment.jpg)
+
 Download [here](assets/assigment-2.md)
 
