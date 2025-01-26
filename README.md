@@ -58,3 +58,16 @@ This repository created to update weekly course progress of Linux Management in 
 - VM created according to Microsoft Azure course specifications
 - All security best practices followed
 - SSH key authentication used for enhanced security
+
+## Assingment 2
+
+The task involves selecting five level 2 directories and saving their contents in a file named "listing.md." A level 2 directory is defined as a directory that is two levels deep within the file system, such as /home/mylogin/. Examples of directories that do not qualify as level 2 include /tmp/ (level 1) and /usr/local/bin/ (level 3).
+
+For each of the five selected level 2 directories, the contents should be listed, which involves listing the filenames within each directory. The resulting file, "listing.md," will contain the directory paths along with their respective filenames.
+
+``` bash
+sudo ls /etc/{security,selinux,systemd,sos,ssh} > listing.md
+```
+
+Download [here](assets/assigment-2.md)
+
