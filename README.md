@@ -168,26 +168,26 @@ sudo usermod -aG sudo lupu
 
 This task required creating a shared directory with specific permissions for Tupu and Lupu. Here's the detailed solution:
 
-1. First, created a new group for the shared directory:
+**First, created a new group for the shared directory:**
 
 ``` bash
 sudo groupadd projekti
 ```
 
-2. Created the directory:
+**Created the directory:**
 
 ``` bash
 sudo mkdir /opt/projekti
 ```
 
-3. Added Tupu and Lupu to the projekti group:
+**Added Tupu and Lupu to the projekti group:**
 
 ``` bash
 sudo usermod -aG projekti tupu
 sudo usermod -aG projekti lupu
 ```
 
-4. Set group ownership and permissions:
+**Set group ownership and permissions:**
 
 ``` bash
 sudo chown :projekti /opt/projekti
@@ -217,3 +217,77 @@ sudo ls -la /opt/projekti
 ```
 
 ![Setting Up Shared Directory](images/w3-task-5-verificaion.jpg)
+
+## Assingment 4
+
+In this assignment, we created a shell script called print.sh to add a line to the file diskspace.txt, reporting the home directory size and the current date and time. We then used crontab to schedule this script to run every 12 hours, ensuring it runs at least six times to populate diskspace.txt with multiple entries. Finally, we utilized an awk command to find the line with the maximum value in the first column and printed it in the format: Max=[maximum value], at [date and time]. This task helped us automate the process of monitoring disk space and identifying the largest recorded value efficiently.
+
+### Step 1: Make a script and add it to cron
+
+**Script: `print.sh`**
+
+This script adds a line to the file `diskspace.txt`, reporting the home directory size and the current date.
+
+``` bash
+#!/bin/bash
+
+output=$(ls -l / | grep home | awk '{print $5}')
+current_datetime=$(date)
+echo "$output $current_datetime" >> /home/lahiru_hewawasam/discspace.txt
+```
+
+![Bash file](images/w4-sh-file.jpg)
+
+**Add to Cron**
+
+Use the following command to open your crontab file:
+
+``` bash
+crontab -e
+```
+
+Add the following line to run the print.sh script every 12 hours:
+
+``` bash
+0 */12 * * * /home/lahiru_hewawasam/print.sh
+```
+
+![Bash file](images/w4-crontab.jpg)
+
+**Note: For ease of testing I raned it in every 2 minutes ( \*/2 * * * * )**
+
+### Step 2: Run the script a minimum of 6 times
+
+After adding the script to cron, it will automatically run every 12 hours, adding a line to diskspace.txt each time. Ensure that it runs at least 6 times so that the file contains at least 6 lines.
+
+![Bash file](images/w4-discspace-file.jpg)
+
+### Step 3: Find and print the line containing the maximum size
+
+Use the following awk command to find the line with the maximum size and print it in the specified format:
+
+``` bash
+awk 'NR == 1 || $1 > max { max = $1; max_line = $0 } END { print "Max=" max ", at " substr(max_line, index(max_line, $2)) }' /home/lahiru_hewawasam/discspace.txt
+```
+
+![Bash file](images/w4-awk-command.jpg)
+
+### Explanation
+
+#### Script (print.sh):
+
+- output=$(ls -l / | grep home | awk '{print $5}'): Get the size of the home directory.
+- awk '{print $5}': Extract the size part.
+- current_datetime=$(date): Get the current date and time and stored in the variable current_datetime.
+- echo "$output $current_datetime" >> /home/lahiru_hewawasam/discspace.txt: Append the output to diskspace.txt.
+
+#### Cron:
+
+- 0 */12 * * *: Run the script every 12 hours. 
+
+**Note: For ease of testing I raned it in every 2 minutes ( \*/2 * * * * )**
+
+#### awk command:
+
+- NR == 1 || $1 > max { max = $1; max_line = $0 }: Find the maximum value in the first column.
+- END { print "Max=" max ", at " substr(max_line, index(max_line, $2)) }: Print the maximum value and the corresponding row in the desired format.
