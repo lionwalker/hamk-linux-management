@@ -18,17 +18,15 @@
 
 *Italic text*
 
-[Links](https://github.com/lionwalker/hamk-linux-management)
+[Links](https://lahiru.info/)
 
 ``` bash
 Code block
 ```
 
-Tables
 | First Header  | Second Header |
 | ------------- | ------------- |
 | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  |
 
-Images
-![Images example](./images/w1-azure-vm-overview.png)
+![Images example](https://dummyimage.com/600x400/000/fff)
