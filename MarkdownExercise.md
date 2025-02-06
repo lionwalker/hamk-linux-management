@@ -30,3 +30,9 @@ Code block
 | Content Cell  | Content Cell  |
 
 ![Images example](https://dummyimage.com/600x400/000/fff)
+
+# Assignment steps
+
+![Step 1](./images/part-1.jpg)
+
+![Step 2](./images/part-2.jpg)

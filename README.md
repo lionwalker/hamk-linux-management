@@ -291,3 +291,245 @@ awk 'NR == 1 || $1 > max { max = $1; max_line = $0 } END { print "Max=" max ", a
 
 - NR == 1 || $1 > max { max = $1; max_line = $0 }: Find the maximum value in the first column.
 - END { print "Max=" max ", at " substr(max_line, index(max_line, $2)) }: Print the maximum value and the corresponding row in the desired format.
+
+## Assingment 6
+
+This report documents the hands-on exploration of the Advanced Package Tool (APT) on a Linux system, covering system updates, package management, repository handling, and troubleshooting procedures.
+
+### Part 1: Understanding APT & System Updates
+
+**APT Version Check**
+
+Command executed:
+``` bash
+apt --version
+```
+
+Output:
+
+![Command output](./images/w5-apt-version.jpg)
+
+**Package List Update**
+
+Command executed:
+``` bash
+sudo apt update
+```
+
+This step is important because:
+
+- It synchronizes the local package index with the remote repositories
+- Ensures the system has the latest information about available packages
+- Required before performing any package installations or upgrades
+- Helps identify which packages need updates
+
+**System Upgrade**
+
+Command executed:
+``` bash
+sudo apt upgrade -y
+```
+
+Difference between update and upgrade:
+
+- apt update only refreshes the package index and metadata
+- apt upgrade actually downloads and installs newer versions of installed packages
+- update is like checking what's new, while upgrade is actually getting those new versions
+
+**Pending Updates Check**
+
+Command executed:
+``` bash
+apt list --upgradable
+```
+
+Output:
+
+![Command output](./images/w5-apt-list-upgradable.jpg)
+
+### Part 2: Installing & Managing Packages
+
+**Package Search**
+
+Command executed:
+``` bash
+apt search image editor
+```
+
+*Selected package: gimp (GNU Image Manipulation Program)*
+
+**Package Details**
+
+Command executed:
+``` bash
+apt show gimp
+```
+
+Output:
+
+![Command output](./images/w5-show-gimp.jpg)
+
+Key dependencies:
+
+- libc6
+- libgdk-pixbuf2.0-0
+- libgegl-0.4-0t64
+- libgimp2.0t64
+- libgtk2.0-0t64
+
+**Package Installation**
+
+Command executed:
+``` bash
+sudo apt install gimp -y
+```
+
+*Installation was successful, verified by launching the application.*
+
+**Version Check**
+
+Command executed:
+``` bash
+apt list --installed | grep gimp
+```
+
+Output:
+
+![Command output](./images/w5-gimp-version-check.jpg)
+
+### Part 3: Removing & Cleaning Packages
+
+Package Removal
+
+Command executed:
+``` bash
+sudo apt remove gimp -y
+```
+
+*Note: This removes the package but keeps configuration files.*
+
+**Complete Package Purge**
+
+Command executed:
+``` bash
+sudo apt purge gimp -y
+```
+
+Difference between remove and purge:
+
+- remove only uninstalls the package binaries
+- purge removes both the binaries and configuration files
+- purge is more thorough when you want to completely remove all traces of a package
+
+**Autoremove Unused Dependencies**
+
+Command executed:
+``` bash
+sudo apt autoremove -y
+```
+
+This step is important because:
+
+- Removes packages that were installed as dependencies but are no longer needed
+- Frees up disk space
+- Keeps the system clean from unused software
+
+**Clean Package Cache**
+
+Command executed:
+``` bash
+sudo apt clean
+```
+
+This command:
+
+- Removes all downloaded package files (.deb) from the local cache
+- Frees up disk space in /var/cache/apt/archives/
+- Doesn't affect installed packages
+
+### Part 4: Managing Repositories & Troubleshooting
+
+**Repository List**
+
+Command executed:
+``` bash
+cat /etc/apt/sources.list
+```
+
+Output:
+
+![Command output](./images/w5-repository-list.jpg)
+
+Observations:
+
+- Contains main Ubuntu repositories
+- Includes different components (main, restricted, universe, multiverse)
+- Lists both source and binary package repositories
+- Contains security updates repositories
+
+**Adding Universe Repository**
+
+Command executed:
+``` bash
+sudo add-apt-repository universe
+sudo apt update
+```
+
+Output:
+
+![Command output](./images/w5-adding-universe-repository.jpg)
+
+Universe repository contains:
+
+- Community-maintained packages
+- Open-source software not officially supported by Ubuntu
+- Larger selection of packages compared to main repository
+- Software that may have more frequent updates
+
+**Installation Failure Simulation**
+
+Command executed:
+``` bash
+sudo apt install fakepackage
+```
+
+Error message:
+
+![Command output](./images/w5-adding-fackpackage.jpg)
+
+Troubleshooting steps:
+
+1. Verify package name spelling
+2. Check if the required repository is enabled
+3. Run apt update to refresh package lists
+4. Search for similar package names using apt search
+5. Consider using alternative package names or sources
+
+### Bonus Challenge: Package Hold Management
+
+Commands executed:
+``` bash
+sudo apt-mark hold firefox
+sudo apt-mark unhold firefox
+```
+
+![Command output](./images/w5-hold-unhold-packages.jpg)
+
+Reasons to hold a package:
+
+- Prevent automatic updates of critical production software
+- Maintain specific version compatibility with other software
+- Avoid potential breaking changes from updates
+- Keep a stable working environment for specific applications
+
+### Conclusion
+
+Through this assignment, we've gained practical experience with APT package management, including:
+
+- System updates and upgrades
+- Package installation and removal
+- Repository management
+- Troubleshooting common issues
+- Advanced package management techniques
+
+These skills are fundamental for maintaining and managing Linux systems effectively.
