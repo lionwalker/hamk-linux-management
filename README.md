@@ -218,7 +218,7 @@ sudo ls -la /opt/projekti
 
 ![Setting Up Shared Directory](images/w3-task-5-verificaion.jpg)
 
-## Assingment 4
+## Assingment 5
 
 In this assignment, we created a shell script called print.sh to add a line to the file diskspace.txt, reporting the home directory size and the current date and time. We then used crontab to schedule this script to run every 12 hours, ensuring it runs at least six times to populate diskspace.txt with multiple entries. Finally, we utilized an awk command to find the line with the maximum value in the first column and printed it in the format: Max=[maximum value], at [date and time]. This task helped us automate the process of monitoring disk space and identifying the largest recorded value efficiently.
 
