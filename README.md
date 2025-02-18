@@ -533,3 +533,197 @@ Through this assignment, we've gained practical experience with APT package mana
 - Advanced package management techniques
 
 These skills are fundamental for maintaining and managing Linux systems effectively.
+
+## Assingment 7
+
+### Linux Virtualization Exercise
+
+### Part 1: Virtualization Concepts
+
+#### Key Concepts Overview
+
+**Virtualization**
+
+Virtualization is a technology that allows the creation of virtual versions of computing resources, including hardware platforms, storage devices, and network resources. It enables multiple virtual systems to run on a single physical machine.
+
+**Hypervisor**
+
+A hypervisor (or Virtual Machine Monitor) is software that creates and manages virtual machines. There are two types:
+
+Type 1 (Bare Metal): Runs directly on hardware (e.g., VMware ESXi, Xen)
+Type 2 (Hosted): Runs on top of an operating system (e.g., VirtualBox, VMware Workstation)
+
+**Virtual Machines (VMs)**
+
+VMs are complete virtualized computing environments that include their own:
+
+- Operating system
+- Virtual hardware (CPU, RAM, storage, network interfaces)
+- Isolated system resources
+
+**Containers**
+
+Containers are lightweight, portable environments that package application code and dependencies. They:
+
+- Share the host OS kernel
+- Are more resource-efficient than VMs
+- Start up faster and are more portable
+
+#### VMs vs. Containers Comparison
+
+**Architecture**
+
+- VMs: Complete isolation with dedicated kernel and resources
+- Containers: Shared kernel with isolated user space
+
+**Resource Utilization**
+
+- VMs: Higher overhead due to running complete OS
+- Containers: Lower overhead, shares host OS resources
+
+**Isolation Level**
+
+- VMs: Complete hardware-level isolation
+- Containers: Process-level isolation
+
+### Part 2: Multipass Implementation
+
+#### Installation
+
+``` bash
+# Install Multipass
+sudo snap install multipass
+```
+
+#### Basic Commands Implementation
+
+```bash
+# Launch default Ubuntu instance
+multipass launch --name primary-vm
+```
+![Command output](./images/w7-multipass-launch.jpg)
+
+```bash
+# List running instances
+multipass list
+```
+![Command output](./images/w7-multipass-list.jpg)
+
+```bash
+# View instance details
+multipass info primary-vm
+```
+![Command output](./images/w7-multipass-info.jpg)
+
+```bash
+# Access instance shell
+multipass shell primary-vm
+```
+![Command output](./images/w7-multipass-shell.jpg)
+
+```bash
+# Execute command on instance
+multipass exec primary-vm -- ls -la
+```
+![Command output](./images/w7-multipass-shell-from-outside.jpg)
+
+```bash
+# Stop instance
+multipass stop primary-vm
+
+# Delete instance
+multipass delete primary-vm
+```
+![Command output](./images/w7-multipass-stop-and-delete.jpg)
+
+#### Cloud-init Configuration
+
+**Start a New Instance with Multipass**
+
+![Command output](./images/w7-cloud-init.jpg)
+
+To start a new instance using this cloud-init configuration, you can use the following multipass command:
+
+```bash
+multipass launch --name my-instance --cloud-init cloud-init.yaml
+```
+
+#### File sharing
+
+```bash
+# Create shared directory
+mkdir ~/shared-folder
+
+# Mount to instance
+multipass mount ~/shared-folder my-instance:/shared
+```
+
+### Part 3: LXD Implementation
+
+```bash
+# Create container
+lxc launch ubuntu:20.04 my-container
+
+# List containers
+lxc list
+
+# Execute commands
+lxc exec my-container -- apt update
+
+# Stop container
+lxc stop my-container
+
+# Delete container
+lxc delete my-container
+```
+![Command output](./images/w7-lxd-list.jpg)
+
+### Part 4: Docker Implementation
+
+#### Installation
+
+```bash
+# Install Docker Engine
+sudo apt update
+sudo apt install docker.io
+
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
+```
+
+Basic Docker Commands
+
+```bash
+# Pull image
+docker pull ubuntu:latest
+
+# Run container
+docker run -it ubuntu:latest
+
+# List containers
+docker ps
+
+# Build from Dockerfile
+docker build -t myapp .
+
+# Stop container
+docker stop container_id
+```
+![Command output](./images/w7-docker-ps.jpg)
+
+### Part 5: Snap Implementation
+
+#### Creating a Basic Snap
+
+![Command output](./images/w7-snapcraft-yaml.jpg)
+
+#### Build and install
+
+```bash
+# Build snap
+snapcraft
+
+# Install locally
+sudo snap install my-app_1.0_amd64.snap --dangerous
+```
