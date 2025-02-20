@@ -645,7 +645,7 @@ multipass delete primary-vm
 To start a new instance using this cloud-init configuration, you can use the following multipass command:
 
 ```bash
-multipass launch --name my-instance --cloud-init cloud-init.yaml
+multipass launch --name my-instance --cloud-init cloud-init
 ```
 
 #### File sharing
