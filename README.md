@@ -647,6 +647,7 @@ To start a new instance using this cloud-init configuration, you can use the fol
 ```bash
 multipass launch --name my-instance --cloud-init cloud-init
 ```
+![Command output](./images/w7-multipass-cloud-list.jpg)
 
 #### File sharing
 
@@ -657,24 +658,25 @@ mkdir ~/shared-folder
 # Mount to instance
 multipass mount ~/shared-folder my-instance:/shared
 ```
+![Command output](./images/w7-multipass-shared.jpg)
 
 ### Part 3: LXD Implementation
 
 ```bash
 # Create container
-lxc launch ubuntu:20.04 my-container
+lxc launch ubuntu:20.04 test-container
 
 # List containers
 lxc list
 
 # Execute commands
-lxc exec my-container -- apt update
+lxc exec test-container -- apt update
 
 # Stop container
-lxc stop my-container
+lxc stop test-container
 
 # Delete container
-lxc delete my-container
+lxc delete test-container
 ```
 ![Command output](./images/w7-lxd-list.jpg)
 
@@ -710,20 +712,128 @@ docker build -t myapp .
 # Stop container
 docker stop container_id
 ```
-![Command output](./images/w7-docker-ps.jpg)
+![Command output](./images/w7-docker-setup.jpg)
 
 ### Part 5: Snap Implementation
 
-#### Creating a Basic Snap
+#### Install snapcraft
 
-![Command output](./images/w7-snapcraft-yaml.jpg)
-
-#### Build and install
+First, install Snapcraft if you haven't already:
 
 ```bash
-# Build snap
-snapcraft
-
-# Install locally
-sudo snap install my-app_1.0_amd64.snap --dangerous
+sudo apt update
+sudo apt install snapcraft -y
 ```
+
+If you're on a non-Ubuntu system, you may need to install Snapcraft via Snap:
+
+```bash
+sudo snap install snapcraft --classic
+```
+
+#### Create a project directory
+
+Create a directory for your Snap project:
+
+```bash
+mkdir my-snapcraft
+cd my-snapcraft
+```
+
+#### Create the Application Script
+
+We’ll make a simple Bash script that prints "Hello, Snap!".
+
+```bash
+mkdir bin
+nano bin/hello-snap
+```
+
+Paste the following content into the file:
+
+```bash
+#!/bin/bash
+echo "Hello, Snap!"
+```
+
+Save and exit (in nano, press CTRL+X, then Y, then Enter).
+
+Make the script executable:
+
+```bash
+chmod +x bin/hello-snap
+```
+
+#### Create the snapcraft YAML file
+
+Snapcraft requires a snapcraft.yaml file to define how the Snap should be built.
+Create the file:
+
+```bash
+nano snapcraft.yaml
+```
+
+Add the following content:
+
+```bash
+name: my-snapcraft
+base: core22
+version: "1.0"
+summary: "A simple Snapcraft app"
+description: "This is a simple Snap application that prints Hello, Snap!"
+
+grade: stable
+confinement: strict
+
+apps:
+  hello:
+    command: bin/hello-snap
+
+parts:
+  hello:
+    plugin: dump
+    source: .
+```
+![Command output](./images/w7-snapcraft-yaml.jpg)
+
+This configuration:
+
+- Names the Snap my-snapcraft
+- Uses the core22 base (Ubuntu 22.04)
+- Defines a simple app that runs bin/hello-snap
+- Uses the dump plugin to include our script in the package
+
+#### Build the snap package
+
+Run the following command to build your Snap:
+
+```bash
+snapcraft
+```
+
+If it's the first time running Snapcraft, it may prompt you to install additional dependencies.
+
+#### Install and run your snap
+
+Once the build is complete, install the generated .snap file (e.g., my-snapcraft_1.0_amd64.snap):
+
+```bash
+sudo snap install my-snapcraft_1.0_amd64.snap --dangerous
+
+```
+
+The --dangerous flag is needed because it’s not from the official Snap store.
+
+Now, run your Snap:
+
+```bash
+my-snapcraft.hello
+```
+
+You should see:
+
+```bash
+Hello, Snap!
+```
+
+![Command output](./images/w7-snapcraft-setup.jpg)
