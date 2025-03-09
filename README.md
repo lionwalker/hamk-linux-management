@@ -231,9 +231,9 @@ This script adds a line to the file `diskspace.txt`, reporting the home director
 ``` bash
 #!/bin/bash
 
-output=$(ls -l / | grep home | awk '{print $5}')
-current_datetime=$(date)
-echo "$output $current_datetime" >> /home/lahiru_hewawasam/discspace.txt
+output=$(du -s $HOME | awk '{print $1}')
+current_datetime=$(date '+%b %d %H:%M:%S %Z %Y')
+echo "$output $current_datetime" >> /home/lahiru_hewawasam/diskspace.txt
 ```
 
 ![Bash file](images/w4-sh-file.jpg)
@@ -267,7 +267,7 @@ After adding the script to cron, it will automatically run every 12 hours, addin
 Use the following awk command to find the line with the maximum size and print it in the specified format:
 
 ``` bash
-awk 'NR == 1 || $1 > max { max = $1; max_line = $0 } END { print "Max=" max ", at " substr(max_line, index(max_line, $2)) }' /home/lahiru_hewawasam/discspace.txt
+awk '{if($1 > max) {max=$1; line=$0}} END {print "Max=" max ", at " substr(line, index(line, $2))}' diskspace.txt
 ```
 
 ![Bash file](images/w4-awk-command.jpg)
@@ -276,10 +276,10 @@ awk 'NR == 1 || $1 > max { max = $1; max_line = $0 } END { print "Max=" max ", a
 
 #### Script (print.sh):
 
-- output=$(ls -l / | grep home | awk '{print $5}'): Get the size of the home directory.
-- awk '{print $5}': Extract the size part.
-- current_datetime=$(date): Get the current date and time and stored in the variable current_datetime.
-- echo "$output $current_datetime" >> /home/lahiru_hewawasam/discspace.txt: Append the output to diskspace.txt.
+- output=$(du -s $HOME | awk '{print $1}'): Get the size of the home directory.
+- awk '{print $1}': Extract the size part.
+- current_datetime=$(date '+%b %d %H:%M:%S %Z %Y'): Get the current date and time and stored in the variable current_datetime.
+- echo "$output $current_datetime" >> /home/lahiru_hewawasam/diskspace.txt: Append the output to diskspace.txt.
 
 #### Cron:
 
@@ -289,8 +289,22 @@ awk 'NR == 1 || $1 > max { max = $1; max_line = $0 } END { print "Max=" max ", a
 
 #### awk command:
 
-- NR == 1 || $1 > max { max = $1; max_line = $0 }: Find the maximum value in the first column.
-- END { print "Max=" max ", at " substr(max_line, index(max_line, $2)) }: Print the maximum value and the corresponding row in the desired format.
+```bash
+awk '{if($1 > max) {max=$1; line=$0}} END {print "Max=" max ", at " substr(line, index(line, $2))}' diskspace.txt
+```
+
+- awk '{if($1 > max) {max=$1; line=$0}}
+  - $1: Refers to the first column of the current line.
+  - max: A variable to store the maximum value found in the first column. Initially, it is undefined.
+  - line: A variable to store the entire line where the maximum value is found.
+  - if($1 > max): This condition checks if the first column value of the current line is greater than the current value of max.
+  - {max=$1; line=$0}: If the condition is true, it updates max to the value in the first column and line to the entire current line ($0).
+- END {print "Max=" max ", at " substr(line, index(line, $2))}'
+  - END: This block is executed after all lines have been processed.
+  - print "Max=" max ", at " substr(line, index(line, $2)): This command prints the maximum value and the corresponding line's content starting from the second column.
+  - "Max=" max: Outputs the maximum value found.
+  - index(line, $2): Finds the starting position of the second column in the stored line (line).
+  - substr(line, index(line, $2)): Extracts the substring from line starting from the position of the second column to the end of the line.
 
 ## Assingment 6
 
